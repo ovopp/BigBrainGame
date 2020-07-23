@@ -19,6 +19,7 @@ image_list = [
     tk.PhotoImage(file='colors/blue.png'),
     tk.PhotoImage(file='colors/yellow.png'),
     tk.PhotoImage(file='colors/orange.png'),
+    tk.PhotoImage(file='colors/grey.png')
 ]
 
 for i in range(5):
@@ -61,18 +62,26 @@ def move(inp):
         for var in reversed(range(4)):
             game_arr[var + 1][idx] = game_arr[var][idx]
         game_arr[0][idx] = tmp_elem
-    drawGrid()
+    maskGrid()
 
 
 def checkGrid():
     global game_arr
     global t0
-    for x in range(1, 6):
-        for item in game_arr[x - 1]:
-            if item is not x:
+    drawGrid()
+    for x in range(5):
+        tmp = game_arr[x][0]
+        for item in game_arr[x]:
+            if item is not tmp:
                 return False
     t1 = time.time() - t0
     tk.Label(window, text=t1).pack()
+
+def maskGrid():
+    image = image_list[5]
+    for i in range(5):
+        for j in range(5):
+            canvas.create_image(50 + (j + 1) * 120, 50 + (i + 1) * 120, image=image)
 
 
 # bottom direction
@@ -142,5 +151,5 @@ canvas.create_window(750, 50 + 4 * 120, window=b3r)
 b4r = tk.Button(window, text=">", command=partial(move, "4R"))
 canvas.create_window(750, 50 + 5 * 120, window=b4r)
 
-bdone = tk.Button(window, text="Check", command=checkGrid)
+bdone = tk.Button(window, text="Check", command=checkGrid).pack()
 window.mainloop()
